@@ -16,10 +16,10 @@ import sockets from '../util/sockets'
 export default {
   name: 'Home',
   mounted() {
-    if(this.$store.state.guildSelection.length > 0) return;
     sockets.request("getUserGuilds", {
       token: this.$cookie.get("token")
     }).then(data => {
+      console.log(data.guilds)
       this.$store.state.guildSelection = data.guilds;
     })
   }

@@ -117,7 +117,7 @@
                 data-uk-icon="icon:users"
                 class="uk-margin-small-right uk-text-primary"
               ></span
-              >Users</span
+              >Members</span
             >
             <h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
               9,999
