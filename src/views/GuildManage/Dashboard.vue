@@ -1,98 +1,5 @@
 <template>
-  <div class="guildManage">
-    <aside id="left-col" class="uk-light uk-visible@m">
-      <div class="left-content-box">
-        <img
-          src="https://picsum.photos/500/300"
-          alt=""
-          class="uk-border-circle profile-img"
-        />
-        <h4 class="uk-text-center uk-margin-remove-vertical text-light">
-          John Doe
-        </h4>
-      </div>
-
-      <div class="left-nav-wrap uk-margin-top">
-        <ul class="uk-nav uk-nav-default uk-nav-parent-icon" data-uk-nav>
-          <li>
-            <a href="#"
-              ><span
-                data-uk-icon="icon: home"
-                class="uk-margin-small-right"
-              ></span
-              >Home</a
-            >
-          </li>
-          <li>
-            <a href="#"
-              ><span
-                data-uk-icon="icon: cog"
-                class="uk-margin-small-right"
-              ></span
-              >Modules</a
-            >
-          </li>
-          <li>
-            <a href="#"
-              ><span
-                data-uk-icon="icon: list"
-                class="uk-margin-small-right"
-              ></span
-              >Commands</a
-            >
-          </li>
-        </ul>
-      </div>
-      <div class="bar-bottom">
-        <ul
-          class="uk-subnav uk-flex uk-flex-center uk-child-width-1-5"
-          data-uk-grid
-        >
-          <li>
-            <a
-              href="#"
-              class="uk-icon-link"
-              data-uk-icon="icon: home"
-              title="Home"
-              data-uk-tooltip
-            ></a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="uk-icon-link"
-              data-uk-icon="icon: settings"
-              title="Settings"
-              data-uk-tooltip
-            ></a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="uk-icon-link"
-              data-uk-icon="icon: social"
-              title="Social"
-              data-uk-tooltip
-            ></a>
-          </li>
-
-          <li>
-            <a
-              href="#"
-              class="uk-icon-link"
-              data-uk-tooltip="Sign out"
-              data-uk-icon="icon: sign-out"
-            ></a>
-          </li>
-        </ul>
-      </div>
-    </aside>
-    <a
-      class="uk-navbar-toggle uk-hidden@m uk-position-top-right uk-position-z-index"
-      data-uk-toggle
-      data-uk-navbar-toggle-icon
-      href="#offcanvas-nav"
-    ></a>
+  <div class="guildDashboard">
     <div id="content" data-uk-height-viewport="expand: true">
       <div class="uk-container uk-container-expand">
         <div
@@ -108,7 +15,7 @@
               >Region</span
             >
             <h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">
-              Europe
+              {{ guildData.region || 0 }}
             </h1>
           </div>
           <div>
@@ -120,13 +27,9 @@
               >Members</span
             >
             <h1 class="uk-heading-primary uk-margin-remove uk-text-primary">
-              9,999
+              {{ guildData.memberCount || 0 }}
             </h1>
-            <div class="uk-text-small">
-              <span class="uk-text-success" data-uk-icon="icon: triangle-up"
-                >+6%</span
-              >
-            </div>
+            <div class="uk-text-small"></div>
           </div>
           <div>
             <span class="uk-text-small"
@@ -137,7 +40,7 @@
               >Channels</span
             >
             <h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">
-              9,999
+              {{ guildData.channelCount || 0 }}
             </h1>
           </div>
           <div>
@@ -149,7 +52,7 @@
               >Categories</span
             >
             <h1 class="uk-heading-primary uk-margin-remove  uk-text-primary">
-              9,999
+              {{ guildData.categoryCount || 0 }}
             </h1>
           </div>
         </div>
@@ -177,18 +80,14 @@
                                 class="uk-input uk-width-large"
                                 id="nickname"
                                 type="text"
-                                placeholder="Nickname"
+                                :placeholder="guildData.nickname || 'OctoBot'"
                               />
                             </div>
                           </div>
                           <div>
-                            <a href=""
-                              ><button
-                                class="uk-button primary uk-border-rounded"
-                              >
-                                Save
-                              </button></a
-                            >
+                            <button class="uk-button secondary uk-border-rounded" disabled>
+                              Save
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -204,18 +103,15 @@
                                 class="uk-input uk-width-large"
                                 id="nickname"
                                 type="text"
-                                placeholder="Prefix"
+                                :placeholder="guildData.prefix || 'Prefix'"
+                                v-model="prefix"
                               />
                             </div>
                           </div>
                           <div>
-                            <a href=""
-                              ><button
-                                class="uk-button primary uk-border-rounded"
-                              >
-                                Save
-                              </button></a
-                            >
+                            <button class="uk-button primary uk-border-rounded" @click.prevent="updatePrefix()">
+                              Save
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -317,36 +213,6 @@
                       <td>25/07/1999</td>
                       <td>Deleted channel named "info" ID: 324679345345</td>
                     </tr>
-                    <tr>
-                      <td>Octo#9234</td>
-                      <td>25/07/1999</td>
-                      <td>Deleted channel named "info" ID: 324679345345</td>
-                    </tr>
-                    <tr>
-                      <td>Octo#9234</td>
-                      <td>25/07/1999</td>
-                      <td>Deleted channel named "info" ID: 324679345345</td>
-                    </tr>
-                    <tr>
-                      <td>Octo#9234</td>
-                      <td>25/07/1999</td>
-                      <td>Deleted channel named "info" ID: 324679345345</td>
-                    </tr>
-                    <tr>
-                      <td>Octo#9234</td>
-                      <td>25/07/1999</td>
-                      <td>Deleted channel named "info" ID: 324679345345</td>
-                    </tr>
-                    <tr>
-                      <td>Octo#9234</td>
-                      <td>25/07/1999</td>
-                      <td>Deleted channel named "info" ID: 324679345345</td>
-                    </tr>
-                    <tr>
-                      <td>Octo#9234</td>
-                      <td>25/07/1999</td>
-                      <td>Deleted channel named "info" ID: 324679345345</td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -355,51 +221,49 @@
         </div>
       </div>
     </div>
-    <div id="offcanvas-nav" data-uk-offcanvas="flip: true; overlay: true">
-      <div
-        class="uk-offcanvas-bar uk-offcanvas-bar-animation uk-offcanvas-slide"
-      >
-        <button
-          class="uk-offcanvas-close uk-close uk-icon"
-          type="button"
-          data-uk-close
-        ></button>
-        <ul class="uk-nav uk-nav-default">
-          <li>
-            <a href="#"
-              ><span
-                data-uk-icon="icon: home"
-                class="uk-margin-small-right"
-              ></span
-              >Home</a
-            >
-          </li>
-          <li>
-            <a href="#"
-              ><span
-                data-uk-icon="icon: cog"
-                class="uk-margin-small-right"
-              ></span
-              >Modules</a
-            >
-          </li>
-          <li>
-            <a href="#"
-              ><span
-                data-uk-icon="icon: list"
-                class="uk-margin-small-right"
-              ></span
-              >Commands</a
-            >
-          </li>
-        </ul>
-      </div>
-    </div>
   </div>
 </template>
 
-<style>
-@import url("../../public/css/uikit.min.css");
-@import url("../../public/css/dashboard.css");
-@import url("../../public/css/universal.css");
+<script>
+import sockets from "../../util/sockets";
+
+export default {
+  name: "GuildDashboard",
+  data: () => ({
+    guildData: {},
+    prefix: ""
+  }),
+  methods: {
+    updatePrefix() {
+      const prefix = this.prefix.trim();
+      if(this.$store.state.loading || !this.guildData.prefix || prefix.length <= 0 || prefix.length > 32) return
+
+      this.$store.state.loading = true;
+      sockets.request("updatePrefix", {
+        token: this.$cookie.get("token"),
+        guildId: this.$route.params.guildId,
+        prefix
+      }).then((res) => {
+        if(!res.prefix) console.log("bad");
+        this.guildData.prefix = prefix;
+        this.prefix = "";
+        this.$store.state.loading = false;
+      })
+    }
+  },
+  mounted() {
+    this.$store.state.loading = true;
+    sockets.request("guildDashboard", {
+      token: this.$cookie.get("token"),
+      guildId: this.$route.params.guildId,
+    }).then(guildData => {
+      this.guildData = guildData;
+      this.$store.state.loading = false;
+    })
+  },
+};
+</script>
+
+<style scoped>
+@import url("../../../public/css/dashboard.css");
 </style>
