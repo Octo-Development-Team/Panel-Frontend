@@ -81,11 +81,12 @@
                                 id="nickname"
                                 type="text"
                                 :placeholder="guildData.nickname || 'OctoBot'"
+                                v-model="nickname"
                               />
                             </div>
                           </div>
                           <div>
-                            <button class="uk-button secondary uk-border-rounded" disabled>
+                            <button class="uk-button primary uk-border-rounded" @click.prevent="updateNickname()">
                               Save
                             </button>
                           </div>
@@ -231,7 +232,8 @@ export default {
   name: "GuildDashboard",
   data: () => ({
     guildData: {},
-    prefix: ""
+    prefix: "",
+    nickname: ""
   }),
   methods: {
     updatePrefix() {
@@ -244,9 +246,23 @@ export default {
         guildId: this.$route.params.guildId,
         prefix
       }).then((res) => {
-        if(!res.prefix) console.log("bad");
-        this.guildData.prefix = prefix;
+        this.guildData.prefix = res.prefix || prefix;
         this.prefix = "";
+        this.$store.state.loading = false;
+      })
+    },
+    updateNickname() {
+      const nickname = this.nickname.trim();
+      if(this.$store.state.loading || !this.guildData.nickname || nickname.length <= 0 || nickname.length > 32) return
+
+      this.$store.state.loading = true;
+      sockets.request("updateNickname", {
+        token: this.$cookie.get("token"),
+        guildId: this.$route.params.guildId,
+        nickname
+      }).then((res) => {
+        this.guildData.nickname = res.nickname || nickname;
+        this.nickname = "";
         this.$store.state.loading = false;
       })
     }

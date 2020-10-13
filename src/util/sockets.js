@@ -1,10 +1,11 @@
 import store from '../store'
+import router from '../router'
 import io from 'socket.io-client'
 
 export default {
 
     request: function(path, payload) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             connect().then(() => {
                 const backend = store.state.socket;
                 
@@ -15,6 +16,10 @@ export default {
                     delete response["_path"];
                     delete response["_payload"];
     
+                    if(!response.status || response.status < 200 || response.status >= 300) {
+                        if(response.status === 403 || (response.status === 400 && !payload.guildId)) return router.currentRoute.path !== "/" ? router.push("/") : null;
+                        return reject(`${response.error || "Invalid request"}: ${response.status}`)
+                    }
                     resolve(response)
                 }
     

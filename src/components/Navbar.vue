@@ -2,10 +2,10 @@
   <div>
     <aside id="left-col" class="uk-light uk-visible@m">
       <div class="left-content-box uk-grid uk-grid-collapse" style="background-color: #1a1a1a; padding: 10px;" uk-grid>
-        <img :src="`https://cdn.discordapp.com/avatars/${userJwt.id}/${userJwt.avatar}.png`" alt="" class="uk-border-circle profile-img uk-width-1-2@l" style="margin: 0; margin-right: 10px;">
+        <img :src="`https://cdn.discordapp.com/avatars/${userJwt.id}/${userJwt.avatar}.png`" alt="" class="uk-border-circle profile-img uk-width-1-2@l" style="margin: 0; margin-right: 10px;" v-if="userJwt.id && userJwt.avatar">
         <h4 class="uk-text-center uk-margin-remove-vertical text-light uk-width-1-2@l" style="text-align: center; position: relative; top: 50%; -ms-transform: translateY(25%);
         -webkit-transform: translateY(25%);
-        transform: translateY(25%);">{{ userJwt.username.length > 16 ? userJwt.username.slice(0, 12) + "…" : userJwt.username }}</h4>
+        transform: translateY(25%);">{{ !userJwt.username ? "" : userJwt.username.length > 16 ? userJwt.username.slice(0, 12) + "…" : userJwt.username }}</h4>
       </div>
       <div class="left-content-box">
         <img
