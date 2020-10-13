@@ -77,10 +77,10 @@
                           <div>
                             <div class="uk-form-controls">
                               <input
-                                class="uk-input uk-width-large"
+                                class="uk-input uk-width-large uk-text-primary"
                                 id="nickname"
                                 type="text"
-                                :placeholder="guildData.nickname || 'OctoBot'"
+                                :placeholder="'Nickname: ' + (guildData.nickname || 'OctoBot')"
                                 v-model="nickname"
                               />
                             </div>
@@ -101,10 +101,10 @@
                           <div>
                             <div class="uk-form-controls">
                               <input
-                                class="uk-input uk-width-large"
+                                class="uk-input uk-width-large uk-text-primary"
                                 id="nickname"
                                 type="text"
-                                :placeholder="guildData.prefix || 'Prefix'"
+                                :placeholder="'Prefix: ' + (guildData.prefix || 'Prefix')"
                                 v-model="prefix"
                               />
                             </div>
@@ -126,6 +126,7 @@
             <div
               class="uk-card uk-card-default uk-card-small uk-card-hover uk-border-rounded"
             >
+              <div class="uk-position-cover uk-border-rounded" style="background-color: rgba(0, 0, 0, 0.6);"></div>
               <div class="uk-card-header">
                 <div class="uk-grid uk-grid-small">
                   <div class="uk-width-expand">
@@ -136,13 +137,13 @@
               <div class="uk-card-body">
                 <form action="">
                   <label
-                    ><input class="uk-checkbox" type="checkbox" /> List on
+                    ><input class="uk-checkbox" type="checkbox"/> List on
                     Server List</label
                   >
                   <div class="uk-grid-small uk-margin-top" uk-grid>
                     <div>
                       <div>
-                        <label class="uk-form-label" for="form-stacked-text"
+                        <label class="uk-form-label uk-text-muted" for="form-stacked-text"
                           >Invite URL</label
                         >
                         <div class="uk-form-controls">
@@ -157,13 +158,12 @@
                     </div>
                     <div>
                       <div>
-                        <label class="uk-form-label" for="form-stacked-select"
+                        <label class="uk-form-label uk-text-muted" for="form-stacked-select"
                           >Server Category</label
                         >
                         <div class="uk-form-controls">
                           <select class="uk-select" id="form-stacked-select">
                             <option>Development</option>
-                            <option>Option 02</option>
                           </select>
                         </div>
                       </div>
@@ -172,18 +172,16 @@
                 </form>
                 <form class="uk-margin-top" action="">
                   <div class="uk-margin">
-                    <div class="uk-form-label">Server Description</div>
+                    <div class="uk-form-label uk-text-muted">Server Description</div>
                     <div class="uk-form-controls">
                       <textarea
                         class="uk-textarea uk-margin-bottom"
                         rows="5"
                         placeholder="Enter the description of your amazing server right in this box!"
                       ></textarea>
-                      <a href=""
-                        ><button class="uk-button primary uk-border-rounded">
+                        <button class="uk-button primary uk-border-rounded" @click.prevent="">
                           Save
-                        </button></a
-                      >
+                        </button>
                     </div>
                   </div>
                 </form>
@@ -194,6 +192,7 @@
             <div
               class="uk-card uk-card-default uk-card-small uk-card-hover uk-border-rounded"
             >
+              <div class="uk-position-cover uk-border-rounded" style="background-color: rgba(0, 0, 0, 0.6);"></div>
               <div class="uk-card-header">
                 <div class="uk-grid uk-grid-small">
                   <div class="uk-width-expand"><h4>Recent Action Log</h4></div>
@@ -208,13 +207,6 @@
                       <th>Action</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>Octo#9234</td>
-                      <td>25/07/1999</td>
-                      <td>Deleted channel named "info" ID: 324679345345</td>
-                    </tr>
-                  </tbody>
                 </table>
               </div>
             </div>
@@ -249,6 +241,8 @@ export default {
         this.guildData.prefix = res.prefix || prefix;
         this.prefix = "";
         this.$store.state.loading = false;
+      }).catch(() => {
+        this.$store.state.loading = false;
       })
     },
     updateNickname() {
@@ -264,6 +258,8 @@ export default {
         this.guildData.nickname = res.nickname || nickname;
         this.nickname = "";
         this.$store.state.loading = false;
+      }).catch(() => {
+        this.$store.state.loading = false;
       })
     }
   },
@@ -274,6 +270,8 @@ export default {
       guildId: this.$route.params.guildId,
     }).then(guildData => {
       this.guildData = guildData;
+      this.$store.state.loading = false;
+    }).catch(() => {
       this.$store.state.loading = false;
     })
   },

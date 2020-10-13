@@ -17,8 +17,21 @@ export default {
                     delete response["_payload"];
     
                     if(!response.status || response.status < 200 || response.status >= 300) {
-                        if(response.status === 403 || (response.status === 400 && !payload.guildId)) return router.currentRoute.path !== "/" ? router.push("/") : null;
-                        return reject(`${response.error || "Invalid request"}: ${response.status}`)
+                        if(response.status === 403 || (response.status === 400 && !payload.guildId)) {
+                            store.commit("pushAlert", { type: "danger", message: "You can't manage this guild" });
+                            return router.currentRoute.path !== "/" ? router.push("/") : null;
+                        }
+
+                        switch(response.status) {
+                            case 429:
+                                store.commit("pushAlert", { type: "danger", message: "You are being rate limited, calm down buddy." });
+                                break;
+                            default:
+                                store.commit("pushAlert", { type: "danger", message: `Internal server error (${response.status}), please try again later.` });
+                                break;
+                        }
+
+                        return reject({ code: response.status, error: response.error || "Invalid request"})
                     }
                     resolve(response)
                 }

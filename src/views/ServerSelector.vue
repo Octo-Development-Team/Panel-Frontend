@@ -40,7 +40,7 @@
                   v-if="!guild.icon"
                 />
               </div>
-              <router-link :to="`/${guild.id}`"
+              <router-link :to="`/manage/${guild.id}`"
                 ><button class="uk-button primary uk-border-rounded">
                   Select
                 </button></router-link
@@ -67,6 +67,8 @@ export default {
       })
       .then((data) => {
         this.$store.state.guildSelection = data.guilds;
+        this.$store.state.loading = false;
+      }).catch(() => {
         this.$store.state.loading = false;
       });
   },

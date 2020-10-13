@@ -21,7 +21,7 @@
       <div class="left-nav-wrap uk-margin-top">
         <ul class="uk-nav uk-nav-default uk-nav-parent-icon" data-uk-nav>
           <li>
-            <router-link :to="`/${$route.params.guildId}`"
+            <router-link :to="`/manage/${$route.params.guildId}`"
               ><span
                 data-uk-icon="icon: home"
                 class="uk-margin-small-right"
@@ -30,7 +30,7 @@
             >
           </li>
           <li>
-            <router-link :to="`/${$route.params.guildId}/modules`"
+            <router-link :to="`/manage/${$route.params.guildId}/modules`"
               ><span
                 data-uk-icon="icon: cog"
                 class="uk-margin-small-right"
@@ -39,7 +39,7 @@
             >
           </li>
           <li>
-            <router-link :to="`/${$route.params.guildId}/`"
+            <router-link :to="`/manage/${$route.params.guildId}/`"
               ><span
                 data-uk-icon="icon: list"
                 class="uk-margin-small-right"
@@ -64,25 +64,6 @@
               @click="selectServer()"
             ></a>
           </li>
-          <li>
-            <a
-              href="#"
-              class="uk-icon-link"
-              data-uk-icon="icon: settings"
-              title="Settings"
-              data-uk-tooltip
-            ></a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="uk-icon-link"
-              data-uk-icon="icon: social"
-              title="Social"
-              data-uk-tooltip
-            ></a>
-          </li>
-
           <li>
             <a
               href="#"
@@ -112,7 +93,7 @@
         ></button>
         <ul class="uk-nav uk-nav-default">
           <li>
-            <router-link :to="`/${$route.params.guildId}/`"
+            <router-link :to="`/manage/${$route.params.guildId}/`"
               ><span
                 data-uk-icon="icon: home"
                 class="uk-margin-small-right"
@@ -121,7 +102,7 @@
             >
           </li>
           <li>
-            <router-link :to="`/${$route.params.guildId}/modules`"
+            <router-link :to="`/manage/${$route.params.guildId}/modules`"
               ><span
                 data-uk-icon="icon: cog"
                 class="uk-margin-small-right"
@@ -130,7 +111,7 @@
             >
           </li>
           <li>
-            <router-link :to="`/${$route.params.guildId}/`"
+            <router-link :to="`/manage/${$route.params.guildId}/`"
               ><span
                 data-uk-icon="icon: list"
                 class="uk-margin-small-right"

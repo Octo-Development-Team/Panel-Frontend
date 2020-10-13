@@ -1,6 +1,7 @@
 <template>
   <div id="content" data-uk-height-viewport="expand: true">
     <div class="uk-container uk-container-expand">
+      <p v-if="botModules.length > 0">Red colored modules do not have their functionality implemented yet</p><br>
       <div class="uk-grid uk-grid-medium" uk-grid>
         <ModuleCard v-for="botModule in botModules" :key="botModule.keyword" :module="botModule" />
       </div>
@@ -28,6 +29,9 @@ export default {
     }).then(res => {
       this.$store.state.loading = false;
       this.botModules = res.modules;
+      this.botModules.sort((a, b) => !a.implemented && b.implemented ? 1 : a.implemented && !b.implemented ? -1 : 0)
+    }).catch(() => {
+      this.$store.state.loading = false;
     })
   },
 };

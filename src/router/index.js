@@ -5,6 +5,7 @@ import ServerSelector from '../views/ServerSelector.vue'
 import GuildManage from '../views/GuildManage/Root.vue'
 import GuildDashboard from '../views/GuildManage/Dashboard.vue'
 import GuildModules from '../views/GuildManage/Modules.vue'
+import FourOhFour from '../views/FourOhFour.vue'
 import sockets from '../util/sockets'
 
 Vue.use(VueRouter)
@@ -16,7 +17,12 @@ const routes = [
     component: ServerSelector
   },
   {
-    path: '/:guildId',
+    path: "/manage",
+    name: "Mange Guild",
+    redirect: "/"
+  },
+  {
+    path: '/manage/:guildId',
     name: 'Manage Guild',
     component: GuildManage,
     children: [
@@ -31,6 +37,10 @@ const routes = [
         component: GuildModules
       }
     ]
+  },
+  {
+    path: "*",
+    component: FourOhFour
   }
 ]
 
@@ -41,6 +51,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  if(!to.path.startsWith("/manage/") && !to.path.endsWith("e/")) return next();
   if(!Vue.cookie.get("token")) location.replace("http://localhost:8888/auth")
   if(store.state.guildSelection.length <= 0) {
     store.state.loading = true;
@@ -50,6 +61,8 @@ router.beforeEach(async (to, from, next) => {
       })
       .then((data) => {
         store.state.guildSelection = data.guilds;
+        store.state.loading = false;
+      }).catch(() => {
         store.state.loading = false;
       });
   }
