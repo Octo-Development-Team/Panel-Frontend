@@ -126,6 +126,7 @@
 </template>
 
 <script>
+import { prod } from '../util/config' 
 import jwt from '../util/jwt';
 
 export default {
@@ -140,7 +141,7 @@ export default {
     methods: {
         signOut() {
             this.$cookie.delete("token");
-            location.replace("http://localhost:8888")
+            location.replace(prod ? "https://octodev.xyz/" : "http://localhost:8888")
         },
         selectServer() {
             this.$router.push("/");
@@ -151,7 +152,7 @@ export default {
         if(!guild) return this.$router.push("/");
 
         this.guild.name = guild.name;
-        this.guild.iconUrl = guild.icon ? `https://cdn.discordapp.com/icons/${this.$route.params.guildId}/${guild.icon}.png?size=64` : "https://cdn.discordapp.com/emojis/755491953793040556.png?v=1"
+        this.guild.iconUrl = guild.icon ? `https://cdn.discordapp.com/icons/${this.$route.params.guildId}/${guild.icon}.png?size=64` : "https://cdn.discordapp.com/attachments/576731635807027230/766000532379795497/Discord_icon.png"
     
         this.userJwt = jwt.parseJwt(this.$cookie.get("token")).discordData;
     }

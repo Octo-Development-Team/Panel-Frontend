@@ -7,6 +7,7 @@ import GuildDashboard from '../views/GuildManage/Dashboard.vue'
 import GuildModules from '../views/GuildManage/Modules.vue'
 import FourOhFour from '../views/FourOhFour.vue'
 import sockets from '../util/sockets'
+import { prod } from '../util/config' 
 
 Vue.use(VueRouter)
 
@@ -50,9 +51,11 @@ const router = new VueRouter({
   routes
 })
 
+const allowed404Paths = ["/"]
+
 router.beforeEach(async (to, from, next) => {
-  if(!to.path.startsWith("/manage/") && !to.path.endsWith("e/")) return next();
-  if(!Vue.cookie.get("token")) location.replace("http://localhost:8888/auth")
+  if(!to.path.startsWith("/manage/") && !to.path.endsWith("e/") && !allowed404Paths.includes(to.path)) return next();
+  if(!Vue.cookie.get("token")) location.replace(prod ? "https://auth.octodev.xyz/auth" : "http://localhost:8888/auth")
   if(store.state.guildSelection.length <= 0) {
     store.state.loading = true;
     await sockets

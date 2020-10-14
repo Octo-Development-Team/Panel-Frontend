@@ -1,6 +1,7 @@
 import store from '../store'
 import router from '../router'
 import io from 'socket.io-client'
+import { prod } from '../util/config' 
 
 export default {
 
@@ -47,7 +48,7 @@ export default {
 function connect() {
     return new Promise(r => {
         if(!store.state.socket) {
-            store.state.socket = io("http://127.0.0.1:8080", {
+            store.state.socket = io(prod ? "https://backend.octodev.xyz:8443" : "https://localhost:8443", {
                 path: "/ws"
             })
             

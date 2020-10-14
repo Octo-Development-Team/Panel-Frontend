@@ -33,7 +33,7 @@
                   v-if="guild.icon"
                 />
                 <img
-                  src="https://cdn.discordapp.com/emojis/755491953793040556.png?v=1"
+                  src="https://cdn.discordapp.com/attachments/576731635807027230/766000532379795497/Discord_icon.png"
                   alt=""
                   class="uk-border-circle"
                   style="width: 128px; height: 128px"
