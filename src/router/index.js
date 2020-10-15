@@ -55,7 +55,7 @@ const allowed404Paths = ["/"]
 
 router.beforeEach(async (to, from, next) => {
   if(!to.path.startsWith("/manage/") && !to.path.endsWith("e/") && !allowed404Paths.includes(to.path)) return next();
-  if(!Vue.cookie.get("token")) location.replace(prod ? "https://auth.octodev.xyz/auth" : "http://localhost:8888/auth")
+  if(!Vue.cookie.get("token", { domain: prod ? ".octodev.xyz" : "localhost" })) location.replace(prod ? "https://auth.octodev.xyz/auth" : "http://localhost:8888/auth")
   if(store.state.guildSelection.length <= 0) {
     store.state.loading = true;
     await sockets
@@ -63,7 +63,14 @@ router.beforeEach(async (to, from, next) => {
         token: Vue.cookie.get("token"),
       })
       .then((data) => {
+        data.guilds.sort((a, b) =>
+          a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+        );
+        data.guilds.sort((a, b) =>
+          !a.botIn && b.botIn ? 1 : a.botIn && !b.botIn ? -1 : 0
+        );
         store.state.guildSelection = data.guilds;
+        store.state.userPremium = data.user.isPremium;
         store.state.loading = false;
       }).catch(() => {
         store.state.loading = false;

@@ -8,6 +8,7 @@ export default new Vuex.Store({
     loading: false,
     socket: null,
     guildSelection: [],
+    userPremium: false,
     alert: {
       display: false,
       type: "",

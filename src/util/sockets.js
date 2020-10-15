@@ -24,6 +24,10 @@ export default {
                         }
 
                         switch(response.status) {
+                            case 401:
+                                // store.commit("pushAlert", { type: "danger", message: "Session expired, please relog" });
+                                location.replace(prod ? "https://auth.octodev.xyz/auth" : "http://localhost:8888/auth")
+                                break;
                             case 429:
                                 store.commit("pushAlert", { type: "danger", message: "You are being rate limited, calm down buddy." });
                                 break;
