@@ -135,7 +135,6 @@ export default {
           !a.botIn && b.botIn ? 1 : a.botIn && !b.botIn ? -1 : 0
         );
         this.$store.state.guildSelection = data.guilds;
-        console.log(data.user.isPremium)
         this.$store.state.userPremium = data.user.isPremium;
         this.$store.state.loading = false;
       })
