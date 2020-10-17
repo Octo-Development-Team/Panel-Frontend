@@ -31,7 +31,6 @@ export default {
     },
   },
   data: () => ({
-      checked: false,
       changing: false
   }),
   methods: {

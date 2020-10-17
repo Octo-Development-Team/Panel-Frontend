@@ -2,9 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
 import ServerSelector from '../views/ServerSelector.vue'
-import GuildManage from '../views/GuildManage/Root.vue'
-import GuildDashboard from '../views/GuildManage/Dashboard.vue'
-import GuildModules from '../views/GuildManage/Modules.vue'
+import GuildManage from '../views/manager/Root.vue'
+import GuildDashboard from '../views/manager/Dashboard.vue'
+import ModuleControl from '../views/manager/modules/Control.vue'
+import MusicControl from '../views/manager/modules/Music.vue'
+import DashboardFourOhFour from '../views/manager/FourOhFour.vue'
 import FourOhFour from '../views/FourOhFour.vue'
 import sockets from '../util/sockets'
 import { prod } from '../util/config' 
@@ -34,10 +36,19 @@ const routes = [
       },
       {
         path: "modules",
-        name: "Guild Modules",
-        component: GuildModules
+        name: "Module Control",
+        component: ModuleControl,
+      },
+      {
+        path: "modules/music",
+        name: "Music Control",
+        component: MusicControl
+      },
+      {
+        path: "*",
+        component: DashboardFourOhFour
       }
-    ]
+    ] 
   },
   {
     path: "*",
@@ -54,7 +65,7 @@ const router = new VueRouter({
 const allowed404Paths = ["/"]
 
 router.beforeEach(async (to, from, next) => {
-  if(!to.path.startsWith("/manage/") && !to.path.endsWith("e/") && !allowed404Paths.includes(to.path)) return next();
+  if(!/^(\/manage)/g.exec(to.path) && !allowed404Paths.includes(to.path)) return next();
   if(!Vue.cookie.get("token", { domain: prod ? ".octodev.xyz" : "localhost" })) location.replace(prod ? "https://auth.octodev.xyz/auth" : "http://localhost:8888/auth")
   if(store.state.guildSelection.length <= 0) {
     store.state.loading = true;

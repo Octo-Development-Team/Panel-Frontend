@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import ModuleCard from '../../components/ModuleCard';
-import sockets from '../../util/sockets';
+import ModuleCard from '../../../components/ModuleCard';
+import sockets from '../../../util/sockets';
 
 export default {
-  name: "GuildModules",
+  name: "Module Control",
   components: {
     ModuleCard
   },
@@ -38,5 +38,5 @@ export default {
 </script>
 
 <style scoped>
-@import url("../../../public/css/dashboard.css");
+@import url("../../../../public/css/dashboard.css");
 </style>
