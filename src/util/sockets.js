@@ -29,7 +29,7 @@ export default {
                                 location.replace(prod ? "https://auth.octodev.xyz/auth" : "http://localhost:8888/auth")
                                 break;
                             case 429:
-                                store.commit("pushAlert", { type: "danger", message: "You are being rate limited, calm down buddy." });
+                                store.commit("pushAlert", { type: "danger", message: "You are being rate limited." });
                                 break;
                             default:
                                 store.commit("pushAlert", { type: "danger", message: `Internal server error (${response.status}), please try again later.` });

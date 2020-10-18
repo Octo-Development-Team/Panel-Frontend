@@ -15,48 +15,77 @@
         >
           Toggle
         </button>
+        <p v-if="musicData.module.enabled && musicData.playing">Queue time {{ formatTime(new Date(this.musicData.queue.np.lengthMS + (this.musicData.queue.tracks.length > 0 ? this.musicData.queue.tracks.reduce((acc, it) => acc + it.lengthMS, this.musicData.queue.tracks[0].lengthMS) : 0))) }}</p>
         <h5 v-if="musicData.module.enabled && !musicData.playing">
           Nothing currently playing
         </h5>
         <div v-if="musicData.module.enabled && musicData.playing">
-					<div uk-grid class="uk-grid-row-small uk-grid-column-small" style="margin-top: 40px;">
-						<div
-							class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin"
-							uk-grid
-						>
-							<div class="uk-card-media-left uk-cover-container">
-								<img :src="`https://i3.ytimg.com/vi/${musicData.queue.np.identifier}/hqdefault.jpg`" alt="" uk-cover />
-								<canvas width="320" height="180"></canvas>
-							</div>
-							<div>
-								<div class="uk-card-body songCardText">
-									<p class="uk-card-title">{{ musicData.paused ? "Paused" : "Playing" }}</p>
-									<p>{{ musicData.queue.np.title }}</p>
-									<p>{{ musicData.queue.np.author }}</p>
-									<p>{{ timePlayed }}/{{ musicData.queue.np.formattedLength }}</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<h4>Next in queue</h4>
-					<div v-for="(gueueItem, index) in musicData.queue.tracks" :key="index" uk-grid class="uk-grid-row-small uk-grid-column-small" style="margin-top: 40px;">
-						<div
-							class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin"
-							uk-grid
-						>
-							<div class="uk-card-media-left uk-cover-container">
-								<img :src="`https://i3.ytimg.com/vi/${gueueItem.identifier}/hqdefault.jpg`" alt="" uk-cover />
-								<canvas width="320" height="180"></canvas>
-							</div>
-							<div>
-								<div class="uk-card-body songCardText">
-									<p>{{ gueueItem.title }}</p>
-									<p>{{ gueueItem.author }}</p>
-									<p>{{ gueueItem.formattedLength }}</p>
-								</div>
-							</div>
-						</div>
-					</div>
+          <div class="uk-grid uk-grid-medium" data-uk-grid>
+            <div class="uk-width-1-2@l">
+              <div
+                class="uk-card uk-card-default uk-card-hover uk-border-rounded uk-grid-collapse uk-child-width-1-2@s uk-margin"
+                uk-grid
+              >
+                <div class="uk-card-media-left uk-cover-container">
+                  <a :href="musicData.queue.np.link" target="_blank">
+                    <img
+                      :src="
+                        `https://i.ytimg.com/vi/${musicData.queue.np.identifier}/hqdefault.jpg`
+                      "
+                      alt=""
+                      uk-cover
+                    />
+                  </a>
+                  <canvas width="600" height="400"></canvas>
+                </div>
+                <div>
+                  <div class="uk-card-body son">
+                    <p class="uk-card-title">
+                        {{ musicData.paused ? "Paused" : "Playing" }}
+                      </p>
+                      <p>{{ musicData.queue.np.title }}</p>
+                      <p>{{ musicData.queue.np.author }}</p>
+                      <p>
+                        {{ timePlayed }}/{{
+                          musicData.queue.np.formattedLength
+                        }}
+                      </p>
+                  </div>
+                </div>
+              </div>
+              <h4>Next in queue</h4>
+              <div
+                v-for="(queueItem, index) in musicData.queue.tracks"
+                :key="index"
+                class="uk-card uk-card-default uk-card-hover uk-border-rounded uk-grid-collapse uk-child-width-1-2@s uk-margin"
+                uk-grid
+              >
+                <div class="uk-card-media-left uk-cover-container">
+                  <a :href="queueItem.link" target="_blank">
+                    <img
+                      :src="
+                        `https://i.ytimg.com/vi/${queueItem.identifier}/hqdefault.jpg`
+                      "
+                      alt=""
+                      uk-cover
+                    />
+                  </a>
+                  <canvas width="600" height="400"></canvas>
+                </div>
+                <div>
+                  <div class="uk-card-body son">
+                      <p>{{ queueItem.title }}</p>
+                      <p>{{ queueItem.author }}</p>
+                      <p>
+                        {{
+                          queueItem.formattedLength
+                        }}
+                      </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -73,19 +102,23 @@ export default {
     musicData: {
       module: {},
       queue: {},
-		},
-		timePlayed: ""
+    },
+    timePlayed: "",
   }),
   methods: {
-		updateTimePlayed() {
-			if(this.musicData.paused) this.musicData.queue.start += 1000;
-			const played = new Date(Date.now() - this.musicData.queue.start)
-			const hours = played.getHours();
-			const minutes = played.getMinutes();
-			const seconds = played.getSeconds();
-			this.timePlayed = `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
-		},
-
+    formatTime(date) {
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+      return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${
+        seconds < 10 ? `0${seconds}` : seconds
+      }`;
+    },
+    updateTimePlayed() {
+      if(this.musicData.paused || !this.musicData.queue) return;
+      const played = new Date(Date.now() - this.musicData.queue.startTime);
+      this.timePlayed = this.formatTime(played);
+    },
     toggleModule(moduleKeyword) {
       this.changingModule = true;
       sockets
@@ -102,10 +135,28 @@ export default {
           this.changingModule = false;
         });
     },
-	},
-  mounted() {
+    async listenQueue() {
+      await sockets.request("modules/listen", {
+        token: this.$cookie.get("token"),
+        guildId: this.$route.params.guildId,
+        state: "join"
+      }).then(res => {
+        if(res.listening) {
+          this.$store.state.socket.on("musicQueueUpdate", musicData => {
+            this.musicData = musicData;
+          })
+          const quitListener =  () => {
+            this.$store.state.socket.removeListener(quitListener);
+            this.listenQueue();
+          };
+          this.$store.state.socket.on("musicQueueQuit", quitListener)
+        }
+      });
+    }
+  },
+  async mounted() {
     this.$store.state.loading = true;
-    sockets
+    const getResult = await sockets
       .request("modules/music", {
         token: this.$cookie.get("token"),
         guildId: this.$route.params.guildId,
@@ -113,16 +164,33 @@ export default {
       .then((res) => {
         this.musicData = res;
         this.$store.state.loading = false;
-			
-				this.updateTimePlayed();
-				setInterval(() => {
-					this.updateTimePlayed();
-				}, 1000)
-			})
-      .catch(() => {
-        this.$store.state.loading = false;
+
+        this.updateTimePlayed();
+        setInterval(() => {
+          this.updateTimePlayed();
+        }, 1000);
+      })
+      .catch((err) => {
+        return err;
       });
+
+    if(getResult instanceof Error) {
+      console.error(getResult)
+      this.$store.state.loading = false;
+      return this.$store.commit("pushAlert", { type: "danger", message: "Failed to get music information." })
+    }
+
+    await this.listenQueue();
+
+    this.$store.state.loading = false;
   },
+  async beforeDestroy() {
+    await sockets.request("modules/listen", {
+      token: this.$cookie.get("token"),
+      guildId: this.$route.params.guildId,
+      state: "leave"
+    })
+  }
 };
 </script>
 
