@@ -4,8 +4,9 @@ This is the frontend side of the panel
 
 ## Running
 
-1. Configure the panel
-2. [Deploy the Vue.js app as you usually would](https://cli.vuejs.org/guide/deployment.html)
+1. Pull the code
+2. Configure the panel
+3. [Deploy the Vue.js app as you usually would](https://cli.vuejs.org/guide/deployment.html)
 
 ## Configuration
 
