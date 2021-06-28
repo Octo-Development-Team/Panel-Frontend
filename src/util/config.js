@@ -1,6 +1,6 @@
 export default {
-    inProduction: false,
     clientId: "CLIENT_ID",
+    inProduction: false,
     production: {
         url: "https://my.bot",
         cookieDomain: ".my.bot",
