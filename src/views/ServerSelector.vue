@@ -88,9 +88,7 @@
                 </button></router-link
               >
               <a
-                :href="
-                  `https://discord.com/api/oauth2/authorize?client_id=750145544093171802&permissions=8&redirect_uri=https%3A%2F%2Fauth.octodev.xyz%2Fauth%2Fcallback&scope=bot&guild_id=${guild.id}`
-                "
+                :href="redirectUrl + guild.id"
                 v-if="!guild.botIn"
                 ><button class="uk-button uk-button-danger uk-border-rounded">
                   Invite
@@ -107,17 +105,18 @@
 <script>
 import sockets from "../util/sockets";
 import jwt from '../util/jwt'
-import { prod } from '../util/config'
+import config from '../util/config.js'
 
 export default {
   name: "Home",
   data: () => ({
     userJwt: {},
+    redirectUrl: `https://discord.com/api/oauth2/authorize?client_id=${config.clientId}&permissions=8&scope=bot&guild_id=`
   }),
   methods: {
     signOut() {
       this.$cookie.delete("token");
-      location.replace(prod ? "https://octodev.xyz/" : "http://localhost:8888");
+      location.replace(config.inProduction ? config.production.url : config.development.url);
     }
   },
   mounted() {

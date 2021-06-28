@@ -1,7 +1,7 @@
 import store from '../store'
 import router from '../router'
 import io from 'socket.io-client'
-import { prod } from '../util/config' 
+import config from '../util/config' 
 
 export default {
 
@@ -26,7 +26,7 @@ export default {
                         switch(response.status) {
                             case 401:
                                 // store.commit("pushAlert", { type: "danger", message: "Session expired, please relog" });
-                                location.replace(prod ? "https://auth.octodev.xyz/auth" : "http://localhost:8888/auth")
+                                location.replace((config.inProduction ? config.production.url : config.development.url) + "/auth")
                                 break;
                             case 429:
                                 store.commit("pushAlert", { type: "danger", message: "You are being rate limited." });
@@ -52,7 +52,7 @@ export default {
 function connect() {
     return new Promise(r => {
         if(!store.state.socket) {
-            store.state.socket = io(prod ? "https://backend.octodev.xyz:8443" : "https://localhost:8443", {
+            store.state.socket = io(config.inProduction ? config.production.backendUrl : config.development.backendUrl, {
                 path: "/ws"
             })
             

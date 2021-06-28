@@ -9,7 +9,7 @@ import MusicControl from '../views/manager/modules/Music.vue'
 import DashboardFourOhFour from '../views/manager/FourOhFour.vue'
 import FourOhFour from '../views/FourOhFour.vue'
 import sockets from '../util/sockets'
-import { prod } from '../util/config' 
+import config from '../util/config' 
 
 Vue.use(VueRouter)
 
@@ -66,7 +66,7 @@ const allowed404Paths = ["/"]
 
 router.beforeEach(async (to, from, next) => {
   if(!/^(\/manage)/g.exec(to.path) && !allowed404Paths.includes(to.path)) return next();
-  if(!Vue.cookie.get("token", { domain: prod ? ".octodev.xyz" : "localhost" })) location.replace(prod ? "https://auth.octodev.xyz/auth" : "http://localhost:8888/auth")
+  if(!Vue.cookie.get("token", { domain: config.inProduction ? config.production.cookieDomain : config.development.cookieDomain })) location.replace((config.inProduction ? config.production.url : config.development.url) + "/auth")
   if(store.state.guildSelection.length <= 0) {
     store.state.loading = true;
     await sockets

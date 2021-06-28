@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import { prod } from '../util/config' 
+import config from '../util/config'
 import jwt from '../util/jwt';
 
 export default {
@@ -165,7 +165,7 @@ export default {
     }),
     methods: {
         openGuild(guild) {
-            if(!guild.botIn) return location.replace(`https://discord.com/api/oauth2/authorize?client_id=750145544093171802&permissions=8&redirect_uri=https%3A%2F%2Fauth.octodev.xyz%2Fauth%2Fcallback&scope=bot&guild_id=${guild.id}`);
+            if(!guild.botIn) return location.replace(`https://discord.com/api/oauth2/authorize?client_id=${config.clientId}&permissions=8&scope=bot&guild_id=${guild.id}`);
             if(this.$route.params.guildId !== guild.id) {
                 this.$router.push(`/manage/${guild.id}`);
                 this.initGuild();
@@ -180,7 +180,7 @@ export default {
         },
         signOut() {
             this.$cookie.delete("token");
-            location.replace(prod ? "https://octodev.xyz/" : "http://localhost:8888")
+            location.replace(config.prod ? config.production.url : config.development.url)
         },
         selectServer() {
             this.$router.push("/");
